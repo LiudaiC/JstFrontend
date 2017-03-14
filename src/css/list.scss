@@ -1,0 +1,115 @@
+html, button {
+    height: 100%;
+    font-family: "Helvetica", "Tahoma", "Microsoft Yahei";
+}
+button {
+    border-style: none;
+    border-radius: 2px;
+    cursor: pointer;
+}
+body {
+    height: 100%;
+    margin: 0;
+    background-color: #ebebeb;
+}
+span {
+    display: inline-block;
+}
+.vip-main {
+    background-color: #fff;
+    height: 100%;
+    margin: 0 auto;
+    width: 60%;
+}
+.float-right {
+    float: right;
+}
+.float-left {
+    float: left;
+}
+.vip-info {
+    margin: 0 24px 36px;
+    padding-top: 36px;
+    border-bottom: 1px solid #e8e9eb;
+    overflow: hidden;
+    .info-head {
+        float: left;
+        div {
+            line-height: 20px;
+            margin-bottom: 30px;
+        }
+    }
+    .info-help {
+        float: right;
+        margin-top: 40px;
+        .button {
+            color: #fff;
+            border-radius: 2px;
+            cursor: pointer;
+            background-color: #1194f6;
+            height: 40px;
+            margin-left: 24px;
+            width: 120px;
+            vertical-align: middle;
+            display: inline-block;
+            line-height: 40px;
+            text-align: center;
+            &:hover {
+                background: #3498e1;
+            }
+        }
+        &::after {
+            content: "";
+            clear: both;
+            display: block;
+        }
+    }
+}
+.vip-icon-help {
+    background-image:url(../img/VIPimages.png);
+    background-image: -webkit-image-set(url(../img/VIPimages.png) 1x, url(../img/VIPimages@2x.png) 2x);
+    background-image: image-set(url(../img/VIPimages.png) 1x, url(../img/VIPimages@2x.png) 2x);
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-position: -10px -10px;
+    cursor: pointer;
+    height: 16px;
+    margin-left: 8px;
+    vertical-align: -1px;
+    width: 16px;
+}
+.info-table-title {
+    height: 28px;
+    line-height: 28px;
+    margin: 0 24px;
+    input {
+        height: 12px;
+        padding: 6px 7px;
+    }
+    button {
+        background-color: #fff;
+        border: 1px solid #e8e9eb;
+        height: 28px;
+        width: 54px;
+    }
+}
+.table-block {
+    margin: 16px 24px;
+    table {
+        width: 100%;
+        text-align: left;
+        thead {
+            background-color: #fafafa;
+            th {
+                color: #999;
+                font-weight: normal;
+            }
+        }
+        tr {
+            height: 40px;
+        }
+        .cell-first {
+            padding-left: 24px;
+        }
+    }
+}

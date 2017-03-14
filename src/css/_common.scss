@@ -1,0 +1,44 @@
+html, button {
+    font-family: "Helvetica", "Tahoma", "Microsoft Yahei";
+}
+
+body {
+  background-color: #ebebeb;
+  margin: 0;
+  font-size: 14px;
+}
+
+h1, h2, h3, h4, h5, h6, p, ul, table, td {
+  margin: 0;
+  padding: 0;
+}
+a {
+    color: #1797f7;
+    cursor: pointer;
+    text-decoration: none;
+}
+button {
+    border-style: none;
+    border-radius: 2px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+}
+input {
+    border: 1px solid #d6d6d6;
+    height: 18px;
+    padding: 6px 10px;
+    vertical-align: middle;
+    &:hover {
+        border-color: #ccc;
+    }
+    &:focus {
+        border-color: #24a4ff;
+    }
+    &.error {
+        border-color: #ff5253;
+    }
+}
+span {
+    display: inline-block;
+}
