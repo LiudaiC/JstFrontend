@@ -5,7 +5,16 @@
     margin: 200px auto;
     input {
         margin-top: 20px;
-        width: 240px;
+        width: 300px;
         height: 36px;
+        &.btn {
+            color: #fff;
+            cursor: pointer;
+            background-color: #29e;
+            font-size: 18px;
+            &:hover{
+                background-color:#2af;
+            };
+        }
     }
 }
