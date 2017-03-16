@@ -1,7 +1,20 @@
 let React = require('react');
 let ReactDOM = require('react-dom');
-const item = React.createClass({
-  render: function() {
+class account extends React.Component {
+    render() {
+
+
+        return (
+          <div>
+            <input type="text" placeholder="请输入登录账号"/>
+          </div>
+        );
+
+    }
+};
+class item extends React.Component {
+  render() {
+
     // 账号输入框
     function Account() {
         return <div><input type="text" placeholder="请输入登录账号"/></div>;
@@ -24,5 +37,5 @@ const item = React.createClass({
       </div>
     );
   }
-});
+};
 module.exports = item;
