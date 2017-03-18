@@ -1,8 +1,9 @@
 /*
 * @Author liudch
-* 
+* @Description The login page
 */
-let re = require('../utils/ajax.js')
+let re = require('../utils/ajax.js');
+let page = require('../utils/page.js');
 let React = require('react');
 let ReactDOM = require('react-dom');
 
@@ -46,9 +47,19 @@ class LoginInput extends React.Component {
 // 登录按钮
 class Loginbutton extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.state= {
+            error:''
+        };
+        this.handleClick = this.handleClick.bind(this);
+    }
+
     handleClick(event) {
-        re.get('',function (html){
-            console.log(html);
+        re.get('', function (res){
+            if (res.success) {
+                page.go('/admin.html');
+            }
         });
     }
 
