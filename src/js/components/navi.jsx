@@ -26,19 +26,27 @@ class Navibtn extends React.Component {
     }
 
     render() {
-        <button className="nav-btn" onClick={handleClick}>{text}</button>
+        <button className="nav-btn" onClick={this.handleClick}>{text}</button>
     }
 }
 
 
 
 class Navigation extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            text: props.text,
+            navi: props.navi
+        };
+        this.handleClick = this.handleClick.bind(this);
+    }
     render() {
         <div>
-            <Navibtn text="1" navi=""/>
-            <Navibtn text="2" navi=""/>
-            <Navibtn text="3" navi=""/>
-            <Navibtn text="4" navi=""/>
+            <Navibtn text="员工列表" navi=""/>
+            <Navibtn text="会员列表" navi=""/>
+            <Navibtn text="产品列表" navi=""/>
+            <Navibtn text="订单列表" navi=""/>
         </div>
     }
 }
