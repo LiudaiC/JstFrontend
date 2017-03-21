@@ -7,18 +7,17 @@
         margin-top: 20px;
         width: 300px;
         height: 36px;
-        &.btn {
-            color: #fff;
-            cursor: pointer;
-            background-color: #29e;
-            font-size: 18px;
-            &:hover{
-                background-color:#2af;
-            };
-        }
     }
     span {
         color: red;
         margin-top: 5px;
+    }
+}
+.nav {
+    margin: 50px 60px;
+    .nav-btn {
+        width: 120px;
+        height: 36px;
+        margin-right: 16px;
     }
 }

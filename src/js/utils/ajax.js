@@ -13,7 +13,7 @@ module.exports = {
         var async = o.async || false;
         var data = o.data || null;
         var xhr = null;
-        var success = o.success || function (){};
+        var success = o.success || function (){console.log(111111)};
         var error = o.error || function (){};
         var contentType = o.contentType || 'application/x-www-form-urlencoded';
 
@@ -28,7 +28,8 @@ module.exports = {
         xhr.send(data);
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
-                success(xhr.responseText);
+                var res = JSON.parse(xhr.responseText);
+                success(res);
             } else {
                 error();
             }
@@ -52,7 +53,8 @@ module.exports = {
             contentType: 'application/json',
             data: data,
             success: success,
-            error: error
+            error: error,
+            async: true
         });
     }
 };

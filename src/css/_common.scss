@@ -45,3 +45,12 @@ input {
 span {
     display: inline-block;
 }
+.btn {
+    color: #fff;
+    cursor: pointer;
+    background-color: #29e;
+    font-size: 18px;
+    &:hover{
+        background-color:#2af;
+    };
+}

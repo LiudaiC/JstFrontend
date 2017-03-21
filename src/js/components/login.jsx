@@ -6,7 +6,7 @@ let re = require('../utils/ajax.js');
 let page = require('../utils/page.js');
 let React = require('react');
 let ReactDOM = require('react-dom');
-var NaviComponent = require('./navi.jsx');
+let NaviComponent = require('./navi.jsx');
 
 // 输入框
 class LoginInput extends React.Component {
@@ -22,8 +22,8 @@ class LoginInput extends React.Component {
     }
 
     handleChange(event) {
-        var value = event.target.value;
-        var error = '';
+        let value = event.target.value;
+        let error = '';
         if (!value || !value.length) {
             error = this.state.type == 'text' ? '请输入登录账号' : '请输入登录密码';
         }
@@ -32,10 +32,10 @@ class LoginInput extends React.Component {
     }
 
     render() {
-        var value = this.state.value;
-        var error = this.state.error;
-        var type = this.state.type;
-        var placeholder = this.state.placeholder;
+        let value = this.state.value;
+        let error = this.state.error;
+        let type = this.state.type;
+        let placeholder = this.state.placeholder;
         return (
           <div>
             <input type={type} placeholder={placeholder} value={value} onChange={this.handleChange} onBlur={this.handleChange}/>
@@ -64,8 +64,8 @@ class Loginbutton extends React.Component {
     }
 
     render(){
-        var disabled = this.state.disabled;
-        var error = this.state.error;
+        let disabled = this.state.disabled;
+        let error = this.state.error;
         return (
             <div>
                 <input type="button" className="btn {disabled}" value="登&nbsp;&nbsp;&nbsp;&nbsp;录" onClick={this.handleClick}/>
@@ -95,23 +95,25 @@ class item extends React.Component {
     }
 
     handleClick() {
-        var data = {
-            account: this.state.account,
-            password: this.state.password
+        let _this = this;
+        let data = {
+            account: _this.state.account,
+            password: _this.state.password
         }
-        re.post('/login', {login:data}, function (res){
+        re.post('/login', data, function (res){
             if (res.success) {
-                this.setState({right: res.right});
+                let right = res.right;
+                _this.setState({right: right});
                 ReactDOM.render(<NaviComponent right={right}/>, document.getElementById('content'));
             } else {
-                this.setState({error: '用户名或密码错误', disabled:'disabled'})
+                _this.setState({error: '用户名或密码错误', disabled:'disabled'})
             }
         });
     }
 
     render() {
-        var account = this.state.account;
-        var password = this.state.password;
+        let account = this.state.account;
+        let password = this.state.password;
         return (
           <div className="jst-login">
             <LoginInput type="text" value={account} inputChange={this.handleChange} placeholder="请输入登录账号"/>
