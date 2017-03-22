@@ -20,6 +20,7 @@ class modal extends React.Component () {
         var title = this.props.title;
         var content = this.props.title;
         return(
+            <div className="modal-backdrop"></div>
             <div className="modal">
                 <div className="modal-head">
                     <span className="modal-title">{title}</span><span className="modal-close"></span>
