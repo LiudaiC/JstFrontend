@@ -3,7 +3,6 @@
 * @Description The login page
 */
 let re = require('../utils/ajax.js');
-let page = require('../utils/page.js');
 let React = require('react');
 let ReactDOM = require('react-dom');
 let NaviComponent = require('./navi.jsx');

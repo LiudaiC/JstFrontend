@@ -15,6 +15,13 @@
 }
 .nav {
     margin: 50px 60px;
+    clear: both;
+    .list-btns {
+        float: left;
+    }
+    .add-btns {
+        float: right;
+    }
     .nav-btn {
         width: 120px;
         height: 36px;
