@@ -23,9 +23,11 @@ class InputComponent extends React.Component {
     }
 
     render () {
-        let value = this.props.value;
-        let placeholder = this.props.placeholder;
-        return (<input placeholder={placeholder} value={value} onChange={this.handleChange}/>);
+        let value = props.value;
+        let placeholder = props.placeholder;
+        let type = props.type;
+        let selfClass = props.selfClass;
+        return (<input placeholder={placeholder} type={type} className={selfClass} value={value} onChange={this.handleChange}/>);
 
     }
 

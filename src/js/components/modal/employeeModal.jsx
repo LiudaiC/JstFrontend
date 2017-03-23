@@ -11,6 +11,22 @@ let ReactDOM = require('react-dom');
 let re = require('../../utils/ajax.js');
 let dom = require('../../utils/dom.js');
 
+class RightSelect extends React.Component {
+    
+    constructor (props) {
+        super(props);
+    }
+
+    handleChange (e) {
+
+    }
+
+    render () {
+        return(<select onChange={this.handleChange}></select>);
+    };
+
+}
+
 class EmployeeModal extends React.Component {
 
     constructor (props) {
@@ -22,7 +38,7 @@ class EmployeeModal extends React.Component {
             age: 0,
             idNum: '',
             phone: '',
-            adress: '',
+            adress: ''
         };
         this.handleChange = this.handleChange.bind(this);
     }
