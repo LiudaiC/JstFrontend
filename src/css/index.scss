@@ -1,4 +1,64 @@
-@import '_common';
+html, button {
+    font-family: "Helvetica", "Tahoma", "Microsoft Yahei";
+}
+
+body {
+  background-color: #ebebeb;
+  margin: 0;
+  font-size: 14px;
+}
+
+h1, h2, h3, h4, h5, h6, p, ul, table, td {
+  margin: 0;
+  padding: 0;
+}
+a {
+    color: #1797f7;
+    cursor: pointer;
+    text-decoration: none;
+}
+button {
+    border-style: none;
+    border-radius: 2px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    box-sizing: content-box;
+    padding: 0;
+}
+input {
+    border: 1px solid #d6d6d6;
+    box-sizing: content-box;
+    height: 18px;
+    padding: 6px 10px;
+    vertical-align: middle;
+    &:hover {
+        border-color: #ccc;
+    }
+    &:focus {
+        border-color: #24a4ff;
+    }
+    &.error {
+        border-color: #ff5253;
+    }
+}
+span {
+    display: inline-block;
+}
+.btn {
+    color: #fff;
+    cursor: pointer;
+    background-color: #29e;
+    font-size: 18px;
+    &:hover{
+        background-color:#2af;
+    };
+}
+
+.hide {
+    display: none;
+}
+
 .jst-login {
     width: 400px;
     height: 300px;
@@ -13,6 +73,7 @@
         margin-top: 5px;
     }
 }
+
 .nav {
     margin: 50px 60px;
     clear: both;
@@ -41,7 +102,40 @@
 }
 
 .modal {
+    border-radius: 2px;
+    background-color: #fff;
+    color: #666;
     width: 600px;
-    height: 800px;
     z-index: 222;
+    padding: 16px;
+    position: absolute;
+    top: 100px;
+    .modal-head {
+        height: 28px;
+        line-height: 28px;
+        clear: both;
+        font-size: 12px;
+        color: #333;
+        .modal-title {
+            float: left;
+        }
+        .modal-close {
+            float: right;
+        }
+    }
+    .modal-body {
+        max-height: 800px;
+    }
+    .modal-footer {
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        .btn {
+            border-radius: 2px;
+            border-style: none;
+            font-size: 12px;
+            margin-right: 10px;
+            width: 60px;
+        }
+    }
 }

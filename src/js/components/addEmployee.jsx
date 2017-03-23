@@ -7,23 +7,15 @@
 *
 */
 
-let re = require('../utils/ajax.js');
 let React = require('react');
 let ReactDOM = require('react-dom');
+let re = require('../utils/ajax.js');
+let dom = require('../utils/dom.js');
 
 class AddEmployee extends React.Component {
 
     constructor (props) {
         super(props);
-        this.state = {
-            name:'',
-            gender: '',
-            adminRight: 0,
-            age: 0,
-            idNum: '',
-            phone: '',
-            adress: '',
-        };
     }
 
     render() {

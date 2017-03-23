@@ -2,10 +2,11 @@
 * @Author liudch
 * @Description The login page
 */
-let re = require('../utils/ajax.js');
 let React = require('react');
 let ReactDOM = require('react-dom');
 let NaviComponent = require('./navi.jsx');
+let re = require('../utils/ajax.js');
+let dom = require('../utils/dom.js');
 
 // 输入框
 class LoginInput extends React.Component {
@@ -103,7 +104,7 @@ class item extends React.Component {
             if (res.success) {
                 let right = res.right;
                 _this.setState({right: right});
-                ReactDOM.render(<NaviComponent right={right}/>, document.getElementById('content'));
+                ReactDOM.render(<NaviComponent right={right}/>, dom.getById('content'));
             } else {
                 _this.setState({error: '用户名或密码错误', disabled:'disabled'})
             }
