@@ -18,17 +18,20 @@ class InputComponent extends React.Component {
 
     // 输入框的值改变触发父级对应值改变
     handleChange (e) {
-        let value = e.target.value;
+        let value = {};
+        let t = e.target;
+        value[t.name] = t.value;
         this.props.handleChange(value);
     }
 
     render () {
-        let value = props.value;
-        let placeholder = props.placeholder;
-        let type = props.type;
-        let selfClass = props.selfClass;
-        return (<input placeholder={placeholder} type={type} className={selfClass} value={value} onChange={this.handleChange}/>);
-
+        console.log(this.props);
+        let value = props.value || '';
+        let placeholder = props.placeholder || '';
+        let type = props.type || 'text';
+        let selfClass = props.selfClass || '';
+        console.log(123);
+        return (<input placeholder={placeholder} name={name} type={type} className={selfClass} value={value} onChange={this.handleChange}/>);
     }
 
 
