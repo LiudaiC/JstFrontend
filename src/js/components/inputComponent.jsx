@@ -14,25 +14,37 @@ class InputComponent extends React.Component {
 
     constructor (props) {
         super(props);
+        this.state = {
+            value: ''
+        };
+        this.handleChange = this.handleChange.bind(this);
     }
 
-    // 输入框的值改变触发父级对应值改变
     handleChange (e) {
         let value = {};
         let t = e.target;
         value[t.name] = t.value;
-        this.props.handleChange(value);
+        this.setState({value: t.value});
+        this.props.dataChange(value);
     }
 
     render () {
-        console.log(this.props);
-        let value = props.value || '';
+        let props = this.props;
+        let desc = props.desc || '';
         let placeholder = props.placeholder || '';
+        let name = props.name || '';
         let type = props.type || 'text';
         let selfClass = props.selfClass || '';
-        console.log(123);
-        return (<input placeholder={placeholder} name={name} type={type} className={selfClass} value={value} onChange={this.handleChange}/>);
+        let value = this.state.value || '';
+        return (
+            <label><span>{desc}</span>
+            <input placeholder={placeholder} name={name} type={type}
+            className={selfClass} value={value} onChange={this.handleChange}/>
+            </label>
+        );
     }
 
 
 }
+
+module.exports = InputComponent;

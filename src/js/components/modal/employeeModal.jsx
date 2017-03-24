@@ -57,21 +57,39 @@ class EmployeeModal extends React.Component {
             age: 0,
             idNum: '',
             phone: '',
-            adress: ''
+            adress: '',
+            account: '',
+            password: ''
         };
-        this.handleChange = this.handleChange.bind(this);
+        this.dataChange = this.dataChange.bind(this);
     }
 
-    handleChange (data) {
+    dataChange (data) {
         this.setState(data);
-        this.props.dataChange(this.state);
+        this.props.dataChange({data:this.state});
     }
 
 
     render() {
         return(
-        <div>
+        <div className="modal-body">
             <div>
+            <InputComponent type="text" placeholder="请输入姓名" name="name" desc="姓名：" dataChange={this.dataChange}/>
+            </div>
+            <div>
+            <InputComponent type="text" placeholder="请输入联系方式" name="phone" desc="联系方式：" dataChange={this.dataChange}/>
+            </div>
+            <div>
+            <InputComponent type="text" placeholder="请输入联系地址" name="address" desc="联系地址：" dataChange={this.dataChange}/>
+            </div>
+            <div>
+            <InputComponent type="text" placeholder="请输入身份证号" name="idNum" desc="身份证号：" dataChange={this.dataChange}/>
+            </div>
+            <div>
+            <InputComponent type="text" placeholder="输入预设账号" name="account" desc="账号：" dataChange={this.dataChange}/>
+            </div>
+            <div>
+            <InputComponent type="text" placeholder="输入预设密码" name="password" desc="密码：" dataChange={this.dataChange}/>
             </div>
         </div>
         );

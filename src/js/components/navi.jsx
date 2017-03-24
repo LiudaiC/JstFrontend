@@ -20,6 +20,7 @@ class Navibtn extends React.Component {
     }
 
     handleClick() {
+        console.log(1);
         var navi = this.props.navi;
         var type = this.props.type;
         if (navi) {
@@ -40,7 +41,7 @@ class Navibtn extends React.Component {
                     title = '结账';
                     break;
             }
-            ReactDOM.render(<Modal title={title} type={type}/>, dom.getById('listMain'));
+            ReactDOM.render(<Modal title={title} type={type}/>, dom.getById('modalMain'));
         }
     }
 
@@ -76,6 +77,7 @@ class Navigation extends React.Component {
                     </div>
                 </div>
                 <div id="listMain"></div>
+                <div id="modalMain"></div>
             </div>
         );
     }

@@ -17,36 +17,61 @@ let OrderModal = require('./orderModal.jsx');
 
 class Modal extends React.Component {
 
+    // Extends props from ancestor
+    // Set base parameter for modal
+    // Bind context to special function
     constructor (props) {
         super(props);
         this.state = {
+            data: {},
             left: 0,
             modalClass: 'modal hide',
             modalBackClass: 'modal-backdrop hide'
         };
         this.handleClick = this.handleClick.bind(this);
         this.closeModal = this.closeModal.bind(this);
+        this.dataChange = this.dataChange.bind(this);
     }
 
-    handleClick(data) {
-        re.post(this.props.type, data, function (res) {
-            if (res.success) {
-                this.props.closeModal();
+    // Submit data to server
+    // Close modal if submit success
+    // Show alter message if fail
+    handleClick() {
+        let _this = this;
+        let data = _this.state.data;
+        let msg = '操作失败！';
+        re.post(_this.props.type, data, function (res) {
+            if (res) {
+                _this.closeModal();
             } else {
-                alert('操作失败！');
+                switch (res) {
+                    case -1:
+                    msg = '登录账号已使用，请重新设置！';
+                }
+                alert(msg);
             }
+        }, function () {
+            alert(msg);
         });
     }
 
-    closeModal() {
-        this.setState({modalClass: 'modal hide', modalBackClass:'modal-backdrop hide'});
+    // Change the context data in the modal input
+    dataChange(data) {
+        this.setState(data);
     }
 
+    // Close the modal
+    closeModal() {
+        ReactDOM.render(null,dom.getById('modalMain'));
+    }
+
+    // Show the modal after initialnized
     componentDidMount() {
         let left = (window.outerWidth-600)/2;
         this.setState({modalClass: 'modal', modalBackClass:'modal-backdrop', left:left});
     }
 
+    // Render the modal base on source data related.
     render (props) {
         let title = this.props.title;
         let type = this.props.type;
@@ -59,12 +84,10 @@ class Modal extends React.Component {
                     <div className="modal-head">
                         <span className="modal-title">{title}</span><i className="modal-close"></i>
                     </div>
-                    <div className="modal-body">
-                        {type == '/employees' && <EmployeeModal/>}
-                        {type == '/members' && <MemberModal/>}
-                        {type == '/products' && <ProductModal/>}
-                        {type == '/orders' && <OrderModal/>}
-                    </div>
+                    {type == '/employees' && <EmployeeModal dataChange={this.dataChange}/>}
+                    {type == '/members' && <MemberModal dataChange={this.dataChange}/>}
+                    {type == '/products' && <ProductModal dataChange={this.dataChange}/>}
+                    {type == '/orders' && <OrderModal dataChange={this.dataChange}/>}
                     <div className="modal-footer">
                         <input type="button" className="btn" value="保存" onClick={this.handleClick}/>
                     </div>

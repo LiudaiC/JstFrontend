@@ -125,6 +125,13 @@ span {
     }
     .modal-body {
         max-height: 800px;
+        div {
+            width: 300px;
+            margin: 8px auto;
+            span {
+                width: 84px;
+            }
+        }
     }
     .modal-footer {
         height: 40px;
