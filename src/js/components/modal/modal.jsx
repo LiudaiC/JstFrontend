@@ -25,8 +25,8 @@ class Modal extends React.Component {
         this.state = {
             data: {},
             left: 0,
-            modalClass: 'modal hide',
-            modalBackClass: 'modal-backdrop hide'
+            modalClass: 'modal',
+            modalBackClass: 'modal-backdrop'
         };
         this.handleClick = this.handleClick.bind(this);
         this.closeModal = this.closeModal.bind(this);
@@ -50,8 +50,6 @@ class Modal extends React.Component {
                 }
                 alert(msg);
             }
-        }, function () {
-            alert(msg);
         });
     }
 
@@ -62,16 +60,16 @@ class Modal extends React.Component {
 
     // Close the modal
     closeModal() {
-        ReactDOM.render(null,dom.getById('modalMain'));
+        this.props.closeModal();
     }
 
     // Show the modal after initialnized
     componentDidMount() {
-        let left = (window.outerWidth-600)/2;
-        this.setState({modalClass: 'modal', modalBackClass:'modal-backdrop', left:left});
+        let left = (window.innerWidth-600)/2;
+        this.setState({left:left});
     }
 
-    // Render the modal base on source data related.
+    // Render the modal based on source data related.
     render (props) {
         let title = this.props.title;
         let type = this.props.type;

@@ -20,7 +20,6 @@ class Navibtn extends React.Component {
     }
 
     handleClick() {
-        console.log(1);
         var navi = this.props.navi;
         var type = this.props.type;
         if (navi) {
@@ -41,7 +40,7 @@ class Navibtn extends React.Component {
                     title = '结账';
                     break;
             }
-            ReactDOM.render(<Modal title={title} type={type}/>, dom.getById('modalMain'));
+            this.props.handleChange({showModal: true, type: type, title: title});
         }
     }
 
@@ -56,10 +55,28 @@ class Navibtn extends React.Component {
 class Navigation extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            showModal: false,
+            type: '',
+            title: ''
+        };
+        this.changeState = this.changeState.bind(this);
+        this.closeModal = this.closeModal.bind(this);
+    }
+
+    changeState(data) {
+        this.setState(data);
+    }
+
+    closeModal() {
+        this.setState({showModal: false});
     }
 
     render() {
         let right = this.props.right;
+        let showModal = this.state.showModal;
+        let type = this.state.type;
+        let title = this.state.title;
         return (
             <div>
                 <div className="nav">
@@ -70,14 +87,16 @@ class Navigation extends React.Component {
                     {right > 4 && <Navibtn title="订单列表" navi="/orders"/>}
                     </div>
                     <div className="add-btns">
-                    {right > 3 && <Navibtn title="新建订单" type="/orders"/>}
-                    {right > 2 && <Navibtn title="添加商品" type="/products"/>}
-                    {right > 1 && <Navibtn title="添加会员" type="/members"/>}
-                    {right > 0 && <Navibtn title="添加员工" type="/employees"/>}
+                    {right > 3 && <Navibtn title="新建订单" type="/orders" handleChange={this.changeState}/>}
+                    {right > 2 && <Navibtn title="添加商品" type="/products" handleChange={this.changeState}/>}
+                    {right > 1 && <Navibtn title="添加会员" type="/members" handleChange={this.changeState}/>}
+                    {right > 0 && <Navibtn title="添加员工" type="/employees" handleChange={this.changeState}/>}
                     </div>
                 </div>
                 <div id="listMain"></div>
-                <div id="modalMain"></div>
+                <div id="modalMain">
+                    {showModal && <Modal title={title} type={type} closeModal={this.closeModal}/>}
+                </div>
             </div>
         );
     }
