@@ -41,7 +41,8 @@ module.exports = {
             method:'get',
             url: url,
             success: success,
-            error: error
+            error: error,
+            async: true
         });
     },
     

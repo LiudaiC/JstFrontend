@@ -55,6 +55,7 @@ class Modal extends React.Component {
 
     // Change the context data in the modal input
     dataChange(data) {
+        console.log(data);
         this.setState(data);
     }
 
@@ -80,7 +81,7 @@ class Modal extends React.Component {
             <div>
                 <div className={modalClass} style={{left:left}}>
                     <div className="modal-head">
-                        <span className="modal-title">{title}</span><i className="modal-close"></i>
+                        <span className="modal-title">{title}</span><i className="modal-close jstfont"></i>
                     </div>
                     {type == '/employees' && <EmployeeModal dataChange={this.dataChange}/>}
                     {type == '/members' && <MemberModal dataChange={this.dataChange}/>}

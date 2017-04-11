@@ -28,7 +28,6 @@ class MemberModal extends React.Component {
     }
 
     dataChange (data) {
-        console.log(data);
         this.setState(data);
         this.props.dataChange({data:this.state});
     }

@@ -102,11 +102,12 @@ class item extends React.Component {
         }
         re.post('/login', data, function (res){
             if (res.success) {
+                document.cookie = 'JSTSESSIONID=' + res.JSTSESSIONID;
                 let right = res.right;
                 _this.setState({right: right});
                 ReactDOM.render(<NaviComponent right={right}/>, dom.getById('content'));
             } else {
-                _this.setState({error: '用户名或密码错误', disabled:'disabled'})
+                _this.setState({error: '用户名或密码错误', disabled:'disabled'});
             }
         });
     }
