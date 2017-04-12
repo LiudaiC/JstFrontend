@@ -21,7 +21,12 @@ class RightSelect extends React.Component {
     }
 
     handleChange (e) {
-        var rights = {adminRight: e.target.value};
+        let t = e.target;
+        let r = '876543210';
+        if (!t.checked) {
+            
+        }
+        let rights = {adminRight: e.target.value};
         this.props.handleChange(rights);
     }
 
@@ -36,11 +41,11 @@ class RightSelect extends React.Component {
             {right: 6, text: '新建服务'},
             {right: 7, text: '快速结账'}
         ];
-        const options = rights.map( e => (<option value={e.right}>{e.text}</option>));
+        const options = rights.map( e => (<span><input type="checkbox" value={e.right}/>{e.text})</span>);
         return(
-            <select onChange={this.handleChange} value="7">
+            <div>
                 {options}
-            </select>
+            </div>
         );
     };
 

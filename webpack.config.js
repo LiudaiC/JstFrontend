@@ -38,6 +38,10 @@ module.exports = {
             {
                 test: /\.(png|jpg)$/, 
                 loader: "file-loader?name=../img/[hash:8].[name].[ext]"
+            },
+            {
+                test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+                loader: 'url-loader?limit=100000'
             }
         ]
     },

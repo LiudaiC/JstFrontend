@@ -46,11 +46,14 @@ span {
     display: inline-block;
 }
 @font-face {
-    font-family: 'jstfont';
-    src: url('fonts/jst.eot?#iefix') format('embedded-opentype'),
-    url('fonts/jst.woff') format('woff'),
+  font-family: 'jstfont';
+  src:  url('fonts/jst.eot');
+  src:  url('fonts/jst.eot#iefix') format('embedded-opentype'),
     url('fonts/jst.ttf') format('truetype'),
-    url('fonts/jst.svg#iconfont') format('svg');
+    url('fonts/jst.woff') format('woff'),
+    url('fonts/jst.svg#jst') format('svg');
+  font-weight: normal;
+  font-style: normal;
 }
 .jstfont {
     font-family: 'jstfont' !important;
@@ -139,6 +142,7 @@ span {
                 color: #666;
                 content: '\e964';
                 cursor: pointer;
+                font-size: 18px;
             }
         }
     }

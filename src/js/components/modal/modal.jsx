@@ -81,7 +81,7 @@ class Modal extends React.Component {
             <div>
                 <div className={modalClass} style={{left:left}}>
                     <div className="modal-head">
-                        <span className="modal-title">{title}</span><i className="modal-close jstfont"></i>
+                        <span className="modal-title">{title}</span><i className="modal-close jstfont" onClick={this.closeModal}></i>
                     </div>
                     {type == '/employees' && <EmployeeModal dataChange={this.dataChange}/>}
                     {type == '/members' && <MemberModal dataChange={this.dataChange}/>}
