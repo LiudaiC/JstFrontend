@@ -8,6 +8,10 @@
 */
 let React = require('react');
 let ReactDOM = require('react-dom');
+let MemberList = require('./list/memberList.jsx');
+let OrderList = require('./list/orderList.jsx');
+let ProductList = require('./list/productList.jsx');
+let EmployeeList = require('./list/employeeList.jsx');
 let re = require('../utils/ajax.js');
 let dom = require('../utils/dom.js');
 let Modal = require('./modal/modal.jsx');
@@ -23,7 +27,7 @@ class Navibtn extends React.Component {
         var navi = this.props.navi;
         var type = this.props.type;
         if (navi) {
-            re.get(navi);
+            this.props.onClick(navi);
         } else {
             var title = '';
             switch (type) {
@@ -46,7 +50,30 @@ class Navibtn extends React.Component {
 
     render() {
         let title = this.props.title;
-        return(<button className="nav-btn btn" onClick={this.handleClick}>{title}</button>);
+        return(<button className="nav-btn btn" ref="showModal" onClick={this.handleClick}>{title}</button>);
+    }
+}
+
+class PersonalInfo extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick() {
+        this.props.showList('/orders');
+    }
+
+    render() {
+        let orderNum = this.props.orderNum;
+        let totalAmount = this.props.totalAmount;
+        let realAmount = this.props.realAmount;
+        return(
+            <span className="jst-personal-info">
+            本月已完成<a onClick={this.handleClick}> {orderNum} </a>项服务，原价合计<span className="color-orange">￥ {totalAmount.toFixed(2)} </span>元，
+            实收总金额<span className="color-orange">￥ {realAmount.toFixed(2)} </span>元
+            </span>
+        );
     }
 }
 
@@ -57,19 +84,83 @@ class Navigation extends React.Component {
         super(props);
         this.state = {
             showModal: false,
+            memberList: false,
+            orderList: false,
+            productList: true,
+            empList: false,
+            personalinfo: false,
+            realAmount: 0,
             type: '',
+            typeId: 0,
             title: ''
         };
         this.changeState = this.changeState.bind(this);
-        this.closeModal = this.closeModal.bind(this);
+        this.showList = this.showList.bind(this);
+        this.logout = this.logout.bind(this);
+        this.modifyPassword = this.modifyPassword.bind(this);
+        this.updateOper = this.updateOper.bind(this);
+    }
+
+    updateOper(title, type, id) {
+        this.setState({showModal:true, title:title, type: type, typeId: id})
     }
 
     changeState(data) {
-        this.setState(data);
+        let _this = this;
+        this.setState(data, function () {
+            if(_this.state.showModal && _this.state.type != '/orders'){
+                _this.refs.showModal.showModal();
+            }
+        });
     }
 
-    closeModal() {
-        this.setState({showModal: false});
+    logout () {
+        re.get('/logout', function () {
+            location.reload();
+        });
+    }
+
+    modifyPassword() {
+        this.setState({showModal: true, title: '修改密码', type: 'password'});
+    }
+
+    showList(type, empId) {
+        let _this = this;
+        if (typeof type != 'string') {
+            _this.setState({showModal: false, typeId: 0});
+            return;
+        }
+        _this.setState({
+            showModal: false,
+            memberList: false,
+            orderList: false,
+            productList: false,
+            empList: false,
+            typeId: 0
+        }, function () {
+            switch (type) {
+            case '/members':
+            case '/charge':
+                _this.setState({memberList: true});
+                break;
+            case '/orders':
+                _this.setState({orderList: true, empId: empId});
+                break;
+            case '/products':
+                _this.setState({productList: true});
+                break;
+            case '/employees':
+                _this.setState({empList: true});
+                break;
+            }
+        });
+    }
+
+    componentWillMount() {
+        let _this = this;
+        re.get('/orders/personal', function (res) {
+            _this.setState({personalinfo: true, orderNum:res.orderNum, totalAmount:res.totalAmount, realAmount: res.realAmount});
+        });
     }
 
     render() {
@@ -77,25 +168,45 @@ class Navigation extends React.Component {
         let showModal = this.state.showModal;
         let type = this.state.type;
         let title = this.state.title;
+        let memberList = this.state.memberList;
+        let orderList = this.state.orderList;
+        let productList = this.state.productList;
+        let empList = this.state.empList;
+        let typeId = this.state.typeId;
+        let personalinfo = this.state.personalinfo;
+        let orderNum = this.state.orderNum;
+        let totalAmount = this.state.totalAmount;
+        let empId = this.state.empId;
+        let realAmount = this.state.realAmount;
         return (
             <div>
                 <div className="nav">
+                    <div className="jst-header" id="header">
+                        {personalinfo && <PersonalInfo orderNum={orderNum} realAmount={realAmount} totalAmount={totalAmount} showList={this.showList}/>}
+                        <a href="javascript:void(0)" className="jst-oper" onClick={this.logout}>退出账号</a>
+                        <a href="javascript:void(0)" className="jst-oper" onClick={this.modifyPassword}>修改密码</a>
+                    </div>
                     <div className="list-btns">
-                    {right > 7 && <Navibtn title="员工列表" navi="/employees"/>}
-                    {right > 6 && <Navibtn title="会员列表" navi="/members"/>}
-                    {right > 5 && <Navibtn title="产品列表" navi="/products"/>}
-                    {right > 4 && <Navibtn title="订单列表" navi="/orders"/>}
+                    {right.empList && <Navibtn title="员工列表" navi="/employees" onClick={this.showList}/>}
+                    {right.memberList && <Navibtn title="会员列表" navi="/members" onClick={this.showList}/>}
+                    {right.productList && <Navibtn title="商品列表" navi="/products" onClick={this.showList}/>}
+                    {right.orderList && <Navibtn title="账单列表" navi="/orders" onClick={this.showList}/>}
                     </div>
                     <div className="add-btns">
-                    {right > 3 && <Navibtn title="新建订单" type="/orders" handleChange={this.changeState}/>}
-                    {right > 2 && <Navibtn title="添加商品" type="/products" handleChange={this.changeState}/>}
-                    {right > 1 && <Navibtn title="添加会员" type="/members" handleChange={this.changeState}/>}
-                    {right > 0 && <Navibtn title="添加员工" type="/employees" handleChange={this.changeState}/>}
+                    <Navibtn title="快速结账" type="/orders" handleChange={this.changeState}/>
+                    {right.addProduct && <Navibtn title="添加商品" type="/products" handleChange={this.changeState}/>}
+                    {right.addMember && <Navibtn title="添加会员" type="/members" handleChange={this.changeState}/>}
+                    {right.addEmp && <Navibtn title="添加员工" type="/employees" handleChange={this.changeState}/>}
                     </div>
                 </div>
-                <div id="listMain"></div>
+                <div id="listMain">
+                    {memberList && <MemberList updateOper={this.updateOper} showList={this.showList}/>}
+                    {orderList && <OrderList empId={empId} showList={this.showList} updateOper={this.updateOper}/>}
+                    {productList && <ProductList updateOper={this.updateOper}/>}
+                    {empList && <EmployeeList updateOper={this.updateOper} showList={this.showList}/>}
+                </div>
                 <div id="modalMain">
-                    {showModal && <Modal title={title} type={type} closeModal={this.closeModal}/>}
+                    {showModal && <Modal title={title} ref="showModal" type={type} typeId={typeId} closeModal={this.showList}/>}
                 </div>
             </div>
         );

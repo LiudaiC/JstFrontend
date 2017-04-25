@@ -9,15 +9,21 @@
 
 let React = require('react');
 let ReactDOM = require('react-dom');
+let dom = require('../utils/dom.js');
+let re = require('../utils/ajax.js');
 
 class InputComponent extends React.Component {
 
     constructor (props) {
         super(props);
         this.state = {
-            value: ''
+            value: typeof props.value == 'boolean' ? '' : props.value
         };
         this.handleChange = this.handleChange.bind(this);
+    }
+
+    changeValue (v) {
+        this.setState({value:v});
     }
 
     handleChange (e) {
@@ -25,6 +31,9 @@ class InputComponent extends React.Component {
         let t = e.target;
         value[t.name] = t.value;
         this.setState({value: t.value});
+        if (this.props.name == 'str') {
+            this.setState({balance: -1});
+        }
         this.props.dataChange(value);
     }
 
@@ -35,11 +44,11 @@ class InputComponent extends React.Component {
         let name = props.name || '';
         let type = props.type || 'text';
         let selfClass = props.selfClass || '';
-        let value = this.state.value || '';
+        let value = this.state.value;
         return (
             <label><span>{desc}</span>
             <input placeholder={placeholder} name={name} type={type}
-            className={selfClass} value={value} onChange={this.handleChange}/>
+            className={selfClass} value={value} onChange={this.handleChange} autoComplete="off"/>
             </label>
         );
     }

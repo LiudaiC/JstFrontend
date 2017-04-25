@@ -9,7 +9,7 @@ module.exports = {
     host: location.host,
     fn: function (o) {
         var method = o.method || 'get';
-        var url = this.pro + '//' + this.hostname + '/jst' + o.url || '';
+        var url = this.pro + '//' + this.host + '/jst' + o.url || '';
         var async = o.async || false;
         var data = o.data || null;
         var xhr = null;
@@ -29,7 +29,26 @@ module.exports = {
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 var res = JSON.parse(xhr.responseText);
-                success(res);
+                if (res.relogin) {
+                    location.reload();
+                } else {
+                    let msg = '';
+                    switch (res) {
+                    case -1: 
+                            msg = '会员卡号已存在，请重新输入！';
+                            break;
+                    case -2:
+                        msg = '会员余额不足';
+                        break;
+                    case -3:
+                        msg = '分成比例请设置为0~10';
+                    }
+                    if (msg) {
+                        alert(msg);
+                        return;
+                    }
+                    success(res);
+                }
             } else {
                 error();
             }

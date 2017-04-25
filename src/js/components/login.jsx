@@ -52,7 +52,6 @@ class Loginbutton extends React.Component {
     constructor(props) {
         super(props);
         this.state= {
-            right: props.right,
             disabled: props.disabled,
             error: props.error
         };
@@ -79,6 +78,7 @@ class item extends React.Component {
     constructor(props) {
         super(props);
         this.state= {
+            error: '',
             account: '',
             password: ''
         };
@@ -94,7 +94,10 @@ class item extends React.Component {
         }
     }
 
-    handleClick() {
+    handleClick(e) {
+        if (e && e.keyCode != 13) {
+            return;
+        }
         let _this = this;
         let data = {
             account: _this.state.account,
@@ -104,22 +107,42 @@ class item extends React.Component {
             if (res.success) {
                 document.cookie = 'JSTSESSIONID=' + res.JSTSESSIONID;
                 let right = res.right;
-                _this.setState({right: right});
-                ReactDOM.render(<NaviComponent right={right}/>, dom.getById('content'));
+                window.jstRight = res.right;
+                window.JstEmp = res.empId;
+                let rights = {
+                    empList: right % 17 === 0,
+                    memberList: right % 13 === 0,
+                    productList: right % 11 === 0,
+                    orderList: right % 7 === 0,
+                    addEmp: right % 5 === 0,
+                    addProduct: right % 3 === 0,
+                    addMember: right % 2 === 0
+                };
+                ReactDOM.render(<NaviComponent right={rights}/>, dom.getById('content'));
             } else {
                 _this.setState({error: '用户名或密码错误', disabled:'disabled'});
             }
         });
     }
 
+    componentDidMount() {
+        document.addEventListener("keypress", this.handleClick, false);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener("keypress", this.handleClick, false);
+    }
+
     render() {
         let account = this.state.account;
         let password = this.state.password;
+        let error = this.state.error;
         return (
           <div className="jst-login">
             <LoginInput type="text" value={account} inputChange={this.handleChange} placeholder="请输入登录账号"/>
             <LoginInput type="password" value={password} inputChange={this.handleChange} placeholder="请输入登录密码"/>
             <Loginbutton loginClick={this.handleClick}/>
+            <span>{error}</span>
           </div>
         );
     }
