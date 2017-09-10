@@ -176,6 +176,9 @@ span {
     padding: 16px;
     position: fixed;
     top: 100px;
+    &.delete-modal {
+        width: 400px;
+    }
     .modal-head {
         height: 28px;
         line-height: 28px;
@@ -245,7 +248,6 @@ span {
                     }
                     li {
                         cursor: pointer;
-                        height: 26px;
                         line-height: 26px;
                         padding: 0 10px;
                         + li {
@@ -285,6 +287,7 @@ span {
         }
     }
     .modal-footer {
+        float: right;
         height: 40px;
         line-height: 40px;
         text-align: center;
@@ -294,11 +297,37 @@ span {
             font-size: 12px;
             margin-right: 10px;
             width: 60px;
+            &.cancel {
+                background: #aaa;
+            }
         }
     }
 }
 #listMain {
     width: 100%;
+    .jst-date-wrapper {
+        display: inline-block;
+        .jst-date {
+            display: inline-block;
+            > div {
+                display: inline-block;
+            }
+            input {
+                width: 120px;
+                margin-right: 20px;
+            }
+        }
+        button {
+            font-size: 14px;
+            width: 60px;
+            height: 30px;
+            vertical-align: middle;
+            background-color: #293;
+            &:hover {
+                background-color: #2a3;
+            }
+        }
+    }
     table {
         width: 100%;
         border-collapse: collapse;

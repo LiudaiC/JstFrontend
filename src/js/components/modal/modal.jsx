@@ -154,6 +154,25 @@ class RechargeModal extends React.Component {
     }
 }
 
+class DeleteModal extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            empId: props.typeId
+        };
+    }
+
+    render() {
+        return (
+            <div className="modal-body">
+                <div>
+                    确定删除吗？
+                </div>
+            </div>
+        );
+    }
+}
+
 class Modal extends React.Component {
 
     // Extends props from ancestor
@@ -203,11 +222,13 @@ class Modal extends React.Component {
             }
             return;
         }
+        if (type == '/deleteEmployee') {
+            type = '/employees/' + this.state.typeId;
+            _this.selfData = null
+        }
         re.post(type, _this.selfData, function (res) {
             let msg = '';
-            if (res) {
-                _this.closeModal(type);
-            }
+            _this.closeModal(type);
         });
     }
 
@@ -235,7 +256,7 @@ class Modal extends React.Component {
     render (props) {
         let title = this.props.title;
         let type = this.props.type;
-        let modalClass = this.state.modalClass;
+        let modalClass = this.state.modalClass + (type.indexOf('delete') > 0 ? ' delete-modal' : '');
         let modalBackClass = this.state.modalBackClass;
         let left = this.state.left;
         let typeId = this.state.typeId;
@@ -243,17 +264,20 @@ class Modal extends React.Component {
             <div>
                 <div className={modalClass} style={{left:left}}>
                     <div className="modal-head">
-                        <span className="modal-title">{title}</span><i className="modal-close jstfont" onClick={this.closeModal}></i>
+                        <span className="modal-title"><b>{title}</b></span><i className="modal-close jstfont" onClick={this.closeModal}></i>
                     </div>
                     {type == 'password' && <PasswordModal ref="changePassword" dataChange={this.dataChange}/>}
                     {type == '/employees' && <EmployeeModal ref="newModal" typeId={typeId} type={type} dataChange={this.dataChange}/>}
+                    {type.indexOf('delete') > 0 && <DeleteModal ref="newModal" typeId={typeId} type={type} dataChange={this.dataChange}/>}
                     {type == '/members' && <MemberModal ref="newModal" typeId={typeId} type={type} dataChange={this.dataChange}/>}
                     {type == '/products' && <ProductModal ref="newModal" typeId={typeId} type={type} dataChange={this.dataChange}/>}
                     {type == '/orders' && <OrderModal dataChange={this.dataChange}/>}
                     {type == '/charge' && <RechargeModal typeId={typeId} dataChange={this.dataChange}/>}
                     {type == 'memberInfo' && <MemberInfoModal typeId={typeId}/>}
                     <div className="modal-footer">
-                        {type != 'memberInfo' && <input type="button" className="btn" value="保存" onClick={this.handleClick}/>}
+                        {(type != 'memberInfo' && type.indexOf('delete')<0) && <input type="button" className="btn" value="保存" onClick={this.handleClick}/>}
+                        {type.indexOf('delete') > 0 && <input type="button" className="btn cancel" value="取消" onClick={this.closeModal}/>}
+                        {type.indexOf('delete') > 0 && <input type="button" className="btn" value="确定" onClick={this.handleClick}/>}
                     </div>
                 </div>
                 <div className={modalBackClass}></div>

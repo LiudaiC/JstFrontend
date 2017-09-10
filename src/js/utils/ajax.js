@@ -28,7 +28,7 @@ module.exports = {
         xhr.send(data);
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
-                var res = JSON.parse(xhr.responseText);
+                var res = xhr.responseText == 'OK' ? xhr.responseText : JSON.parse(xhr.responseText);
                 if (res.relogin) {
                     location.reload();
                 } else {
@@ -42,6 +42,8 @@ module.exports = {
                         break;
                     case -3:
                         msg = '分成比例请设置为0~10';
+                    case -4:
+                        msg = '账号已存在，请重新设置';
                     }
                     if (msg) {
                         alert(msg);

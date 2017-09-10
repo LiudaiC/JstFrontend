@@ -22,7 +22,9 @@ class ProductModal extends React.Component {
             originalPrice: '',
             vipPrice: '',
             discountPrice: '',
-            proportion: ''
+            proportion: '',
+            memProportion: '',
+            promotionProortion: ''
         };
         this.dataChange = this.dataChange.bind(this);
         this.changeId = this.changeId.bind(this);
@@ -43,7 +45,9 @@ class ProductModal extends React.Component {
                     originalPrice: res.originalPrice || '',
                     vipPrice: res.vipPrice || '',
                     discountPrice: res.discountPrice || '',
-                    proportion: res.proportion || ''
+                    proportion: res.proportion || '',
+                    memProportion: res.memProportion || '',
+                    promotionProportion: res.promotionProportion || ''
                 });
             })
         }
@@ -64,6 +68,8 @@ class ProductModal extends React.Component {
         let vipPrice = this.state.vipPrice;
         let discountPrice = this.state.discountPrice;
         let proportion = this.state.proportion;
+        let memProportion = this.state.memProportion;
+        let promotionProportion = this.state.promotionProportion;
         return(
         <div className="modal-body">
             <div>
@@ -79,7 +85,13 @@ class ProductModal extends React.Component {
             {id != 0 && <InputComponent type="text" placeholder="请输入活动价" value={discountPrice} name="discountPrice" desc="活动价：" dataChange={this.dataChange}/>}
             </div>
             <div>
-            {id != 0 && <InputComponent type="text" placeholder="请输入分成比例" value={proportion} name="proportion" desc="项目分成：" dataChange={this.dataChange}/>}
+            {id != 0 && <InputComponent type="text" placeholder="请输入提成比例" value={proportion} name="proportion" desc="项目提成：" dataChange={this.dataChange}/>}
+            </div>
+            <div>
+            {id != 0 && <InputComponent type="text" placeholder="请输入提成比例" value={memProportion} name="memProportion" desc="会员价提成：" dataChange={this.dataChange}/>}
+            </div>
+            <div>
+            {id != 0 && <InputComponent type="text" placeholder="请输入提成比例" value={promotionProportion} name="promotionProportion" desc="活动价提成：" dataChange={this.dataChange}/>}
             </div>
         </div>
         );

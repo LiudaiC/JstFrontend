@@ -221,7 +221,7 @@ class OrderModal extends React.Component {
             re.get('/members/query/' + str, function (res) {
                 if (res.length) {
                     let list = res.map(e => (<li data-id={e.id} data-balance={e.balanceAmount} data-name={e.name+'('+e.cardNo+')'} key={e.id}
-                    onClick={_this.liClick}>{e.name}({e.cardNo})</li>));
+                    onClick={_this.liClick}>{e.name}({e.cardNo})({e.phone})</li>));
                     _this.setState({listItem: list});
                 } else {
                     _this.setState({str:''});
@@ -246,7 +246,7 @@ class OrderModal extends React.Component {
             <ProductSelect dataChange={this.dataChange}/>
             <EmpSelect dataChange={this.dataChange}/>
             <div id="queryMember">
-            <InputComponent type="text" placeholder="请输入会员姓名或会员号" name="str" ref="memName" desc="会员：" dataChange={this.dataChange}/>
+            <InputComponent type="text" placeholder="请输入会员姓名、电话或会员号" name="str" ref="memName" desc="会员：" dataChange={this.dataChange}/>
             {balance>0 && <span className="jst-mem-balance">余额：￥ {balance} 元</span>}
             {balance == 0 && <span className="jst-mem-balance">余额：￥ 0 元</span>}
             {str && <QueryResultComponent str={str} listItem={listItem}/> }

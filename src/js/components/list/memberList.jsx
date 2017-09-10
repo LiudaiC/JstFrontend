@@ -61,7 +61,7 @@ class MemberList extends React.Component {
                 let d = date.getDate();
                 e.rdate = date.getFullYear() + '-'
                 + (m < 10 ? '0' + m : m) + '-'+ (d < 10 ? '0' + d :d);
-                list.push(<tr key={e.id} onClick={_this.handleClick} id={e.id}><td className="first-td">{e.cardNo}</td><td>{e.name}</td><td>{e.phone}</td>
+                list.push(<tr key={e.id} onClick={_this.handleClick} id={e.id} title={e.remark}><td className="first-td">{e.cardNo}</td><td>{e.name}</td><td>{e.phone}</td>
                 <td>￥ {e.chargeAmount.toFixed(2)}</td><td>￥ {e.extraAmount.toFixed(2)}</td><td>￥ {e.expenseAmount.toFixed(2)}</td><td>￥ {e.balanceAmount.toFixed(2)}</td>
                 <td title={e.remark}>{e.remark}</td><td>{e.rdate}</td><td><a href="javascript:void(0)" id={e.id} onClick={_this.reCharge}>充值</a>
                 <a href="javascript:void(0)" id={e.id} onClick={_this.updateOper}>编辑</a>

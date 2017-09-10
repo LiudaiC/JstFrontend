@@ -138,6 +138,9 @@ class Navigation extends React.Component {
             empList: false,
             typeId: 0
         }, function () {
+            if (type.indexOf('employee') > 0) {
+                type = '/employees';
+            }
             switch (type) {
             case '/members':
             case '/charge':
@@ -159,7 +162,7 @@ class Navigation extends React.Component {
     componentWillMount() {
         let _this = this;
         re.get('/orders/personal', function (res) {
-            _this.setState({personalinfo: true, orderNum:res.orderNum, totalAmount:res.totalAmount, realAmount: res.realAmount});
+            _this.setState({personalinfo: window.jstRight > 5050, orderNum:res.orderNum, totalAmount:res.totalAmount, realAmount: res.realAmount});
         });
     }
 
@@ -182,7 +185,6 @@ class Navigation extends React.Component {
             <div>
                 <div className="nav">
                     <div className="jst-header" id="header">
-                        {personalinfo && <PersonalInfo orderNum={orderNum} realAmount={realAmount} totalAmount={totalAmount} showList={this.showList}/>}
                         <a href="javascript:void(0)" className="jst-oper" onClick={this.logout}>退出账号</a>
                         <a href="javascript:void(0)" className="jst-oper" onClick={this.modifyPassword}>修改密码</a>
                     </div>
@@ -190,7 +192,7 @@ class Navigation extends React.Component {
                     {right.empList && <Navibtn title="员工列表" navi="/employees" onClick={this.showList}/>}
                     {right.memberList && <Navibtn title="会员列表" navi="/members" onClick={this.showList}/>}
                     {right.productList && <Navibtn title="商品列表" navi="/products" onClick={this.showList}/>}
-                    {right.orderList && <Navibtn title="账单列表" navi="/orders" onClick={this.showList}/>}
+                    {right.orderList && <Navibtn title="账单列表" navi="/orders" onClick={this.showList} handleChange={this.changeState}/>}
                     </div>
                     <div className="add-btns">
                     <Navibtn title="快速结账" type="/orders" handleChange={this.changeState}/>
