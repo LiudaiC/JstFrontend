@@ -9,12 +9,13 @@
 let React = require('react');
 let ReactDOM = require('react-dom');
 let re = require('../../utils/ajax.js');
-let dom = require('../../utils/dom.js');
 let EmployeeModal = require('./employeeModal.jsx');
 let MemberModal = require('./memberModal.jsx');
 let ProductModal = require('./productModal.jsx');
 let OrderModal = require('./orderModal.jsx');
+let dom = require('../../utils/dom.js');
 let InputComponent = require('../inputComponent.jsx');
+let ExportModal = require('./exportModal.jsx');
 
 class MemberInfoModal extends React.Component {
 
@@ -39,10 +40,11 @@ class MemberInfoModal extends React.Component {
                     let d = date.getDate();
                     e.cdate = date.getFullYear() + '-'
                     + (m < 10 ? '0' + m : m) + '-'+ (d < 10 ? '0' + d :d);
-                    cList.push(<li key={i}><span>{e.chargeAmount.toFixed(2)}</span><span>{e.extraAmount.toFixed(2)}</span><span>{e.cdate}</span></li>);
+                    cList.push(<li key={i}><span>{e.chargeAmount.toFixed(2)}</span><span>{e.extraAmount.toFixed(2)}</span>
+                        <span>{e.cdate}</span><span>{e.memDiscount.toFixed(2)}</span><span>{e.remark}</span></li>);
                 });
                 res.expenseList.forEach(function (e, i) {
-                    eList.push(<li key={i}><span>{e.productName}</span><span>{e.realPrice.toFixed(2)}</span><span>{e.orderTime}</span></li>);
+                    eList.push(<li key={i}><span>{e.productName}</span><span>{e.realPrice.toFixed(2)}</span><span>{e.orderTime}</span><span>{e.remark}</span></li>);
                 });
                 _this.setState({
                     mem: res.mem,
@@ -63,12 +65,16 @@ class MemberInfoModal extends React.Component {
                 <div className="jst-mem-info">
                     <ul className="mem-list">
                         <li className="jst-text-center"><b>充值记录</b></li>
-                        <li className="info-title"><span>充值金额(元)</span><span>赠送金额(元)</span><span>充值时间</span></li>
+                        <li className="info-title"><span>充值金额(元)</span><span>赠送金额(元)</span><span>充值时间</span>
+                        <span>折扣</span><span>备注</span></li>
                         {chargeList.length > 0 && chargeList }
                     </ul>
                     <ul className="mem-list">
                         <li className="jst-text-center"><b>消费记录</b>({expenseList.length +'次'})</li>
-                        <li className="info-title"><span>消费项目</span><span>消费金额(元)</span><span>消费时间</span></li>
+                        <li className="info-title"><span>消费项目</span><span>消费金额(元)</span><span>消费时间</span>
+                        <span>备注</span></li>
+                    </ul>
+                    <ul className="mem-list content">
                         {expenseList.length > 0 ? expenseList : <li className="jst-text-center">暂无消费记录</li> }
                     </ul>
                 </div>
@@ -125,9 +131,18 @@ class RechargeModal extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            memberId: props.typeId
+            memberId: props.typeId,
+            balanceAmount: 0,
+            memDiscount: ''
         };
         this.dataChange = this.dataChange.bind(this);
+    }
+
+    componentDidMount() {
+        let _this = this;
+        re.get('/members/'+_this.state.memberId, function (res) {
+            _this.setState({memDiscount: res.memDiscount, balanceAmount: res.balanceAmount.toFixed(2)});
+        });
     }
     
     dataChange (data) {
@@ -138,13 +153,19 @@ class RechargeModal extends React.Component {
     }
 
     render () {
+        let memDiscount = this.state.memDiscount;
+        let balanceAmount = this.state.balanceAmount;
         return(
             <div className="modal-body">
+                <div>会员余额：{balanceAmount}  --  当前折扣：{memDiscount}</div>
                 <div>
                 <InputComponent type="text" placeholder="请输入充值金额" name="chargeAmount" desc="充值金额：" dataChange={this.dataChange}/>
                 </div>
                 <div>
                 <InputComponent type="text" placeholder="请输入赠送金额" name="extraAmount" desc="赠送金额：" dataChange={this.dataChange}/>
+                </div>
+                <div>
+                {balanceAmount && <InputComponent type="text" placeholder="请输入会员折扣: 0 ~ 1.00" name="memDiscount" value={memDiscount} desc="会员折扣：" dataChange={this.dataChange}/>}
                 </div>
                 <div>
                 <InputComponent type="text" placeholder="请输入充值备注" name="remark" desc="备注：" dataChange={this.dataChange}/>
@@ -198,11 +219,9 @@ class Modal extends React.Component {
     // Show alter message if fail
     handleClick() {
         let _this = this;
-        let data = _this.state.data;
+        let st = _this.selfData;
         let type = _this.props.type;
         if (type == 'password') {
-            let st = _this.selfData;
-            console.log(st);
             if (!st.oldPassword) {
                 _this.refs.changePassword.changeErrorMsg('请输入原密码');
             } else if (!st.newPassword) {
@@ -222,11 +241,29 @@ class Modal extends React.Component {
             }
             return;
         }
+        if (type == '/orders') {
+            if (!st.pids.length) {
+                alert('请选择所消费的服务');
+                return;
+            }
+            if (st.realPrice <= 0) {
+                alert('请输入应收金额');
+                return;
+            }
+        }
+        if (type == '/export') {
+            if (!st.type) {
+                alert('请选择导出内容');
+            } else {
+                dom.getById('exportForm').submit();
+            }
+            return;
+        }
         if (type == '/deleteEmployee') {
             type = '/employees/' + this.state.typeId;
-            _this.selfData = null
+            st = null
         }
-        re.post(type, _this.selfData, function (res) {
+        re.post(type, st, function (res) {
             let msg = '';
             _this.closeModal(type);
         });
@@ -245,6 +282,9 @@ class Modal extends React.Component {
     // Show the modal after initialnized
     componentDidMount() {
         let left = (window.innerWidth-600)/2;
+        if (this.props.type.indexOf('memberInfo') >= 0) {
+            left = (window.innerWidth-1000)/2;
+        }
         this.setState({left:left});
     }
 
@@ -256,7 +296,7 @@ class Modal extends React.Component {
     render (props) {
         let title = this.props.title;
         let type = this.props.type;
-        let modalClass = this.state.modalClass + (type.indexOf('delete') > 0 ? ' delete-modal' : '');
+        let modalClass = this.state.modalClass + (type.indexOf('delete') >= 0 ? ' delete-modal' : (type.indexOf('memberInfo') >= 0 ? ' mem-info-modal' : ''));
         let modalBackClass = this.state.modalBackClass;
         let left = this.state.left;
         let typeId = this.state.typeId;
@@ -273,10 +313,11 @@ class Modal extends React.Component {
                     {type == '/products' && <ProductModal ref="newModal" typeId={typeId} type={type} dataChange={this.dataChange}/>}
                     {type == '/orders' && <OrderModal dataChange={this.dataChange}/>}
                     {type == '/charge' && <RechargeModal typeId={typeId} dataChange={this.dataChange}/>}
+                    {type == '/export' && <ExportModal typeId={typeId} dataChange={this.dataChange}/>}
                     {type == 'memberInfo' && <MemberInfoModal typeId={typeId}/>}
                     <div className="modal-footer">
-                        {(type != 'memberInfo' && type.indexOf('delete')<0) && <input type="button" className="btn" value="保存" onClick={this.handleClick}/>}
-                        {type.indexOf('delete') > 0 && <input type="button" className="btn cancel" value="取消" onClick={this.closeModal}/>}
+                        <input type="button" className="btn cancel" value="取消" onClick={this.closeModal}/>
+                        {(type != 'memberInfo' && type.indexOf('delete')<0) && <input type="button" className="btn" value={type =='/export'?'导出':'保存'} onClick={this.handleClick}/>}
                         {type.indexOf('delete') > 0 && <input type="button" className="btn" value="确定" onClick={this.handleClick}/>}
                     </div>
                 </div>

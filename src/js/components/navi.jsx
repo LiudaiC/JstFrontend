@@ -15,6 +15,7 @@ let EmployeeList = require('./list/employeeList.jsx');
 let re = require('../utils/ajax.js');
 let dom = require('../utils/dom.js');
 let Modal = require('./modal/modal.jsx');
+let PageComponent = require('./pageComponent.jsx');
 
 class Navibtn extends React.Component {
     
@@ -42,6 +43,9 @@ class Navibtn extends React.Component {
                     break;
                 case '/orders':
                     title = '结账';
+                    break;
+                case '/export':
+                    title = '导出';
                     break;
             }
             this.props.handleChange({showModal: true, type: type, title: title});
@@ -90,8 +94,11 @@ class Navigation extends React.Component {
             empList: false,
             personalinfo: false,
             realAmount: 0,
+            total: 0,
             type: '',
             typeId: 0,
+            pageNum: 1,
+            pageSize: 20,
             title: ''
         };
         this.changeState = this.changeState.bind(this);
@@ -99,16 +106,24 @@ class Navigation extends React.Component {
         this.logout = this.logout.bind(this);
         this.modifyPassword = this.modifyPassword.bind(this);
         this.updateOper = this.updateOper.bind(this);
+        this.updatePage = this.updatePage.bind(this);
     }
 
     updateOper(title, type, id) {
         this.setState({showModal:true, title:title, type: type, typeId: id})
     }
 
+    updatePage(total, pageNum, type, empId) {
+        let _this = this;
+        this.setState({total: total, pageNum: pageNum}, function() {
+            _this.showList(type, empId);
+        });
+    }
+
     changeState(data) {
         let _this = this;
         this.setState(data, function () {
-            if(_this.state.showModal && _this.state.type != '/orders'){
+            if(_this.state.showModal && _this.state.type != '/orders' && _this.state.type != '/export') {
                 _this.refs.showModal.showModal();
             }
         });
@@ -181,6 +196,8 @@ class Navigation extends React.Component {
         let totalAmount = this.state.totalAmount;
         let empId = this.state.empId;
         let realAmount = this.state.realAmount;
+        let pageNum = this.state.pageNum;
+        let total = this.state.total;
         return (
             <div>
                 <div className="nav">
@@ -199,13 +216,14 @@ class Navigation extends React.Component {
                     {right.addProduct && <Navibtn title="添加商品" type="/products" handleChange={this.changeState}/>}
                     {right.addMember && <Navibtn title="添加会员" type="/members" handleChange={this.changeState}/>}
                     {right.addEmp && <Navibtn title="添加员工" type="/employees" handleChange={this.changeState}/>}
+                    {right.addEmp && <Navibtn title="导出" type="/export" handleChange={this.changeState}/>}
                     </div>
                 </div>
                 <div id="listMain">
-                    {memberList && <MemberList updateOper={this.updateOper} showList={this.showList}/>}
-                    {orderList && <OrderList empId={empId} showList={this.showList} updateOper={this.updateOper}/>}
-                    {productList && <ProductList updateOper={this.updateOper}/>}
-                    {empList && <EmployeeList updateOper={this.updateOper} showList={this.showList}/>}
+                    {memberList && <MemberList updateOper={this.updateOper} showList={this.showList} page={pageNum} updatePage={this.updatePage}/>}
+                    {orderList && <OrderList empId={empId} showList={this.showList} updateOper={this.updateOper}  page={pageNum} updatePage={this.updatePage}/>}
+                    {productList && <ProductList updateOper={this.updateOper}  page={pageNum} updatePage={this.updatePage}/>}
+                    {empList && <EmployeeList updateOper={this.updateOper} showList={this.showList}  page={pageNum} updatePage={this.updatePage}/>}
                 </div>
                 <div id="modalMain">
                     {showModal && <Modal title={title} ref="showModal" type={type} typeId={typeId} closeModal={this.showList}/>}

@@ -16,7 +16,7 @@ import moment from 'moment';
 require('react-datepicker/dist/react-datepicker.css');
 
 
-class MyComponent extends React.Component {
+class DateComponent extends React.Component {
 
     constructor (props) {
         super(props);
@@ -112,9 +112,11 @@ class OrderList extends React.Component {
 
     changeList (start, end) {
         let _this = this;
+        console.log(this.props.page);
         let url = _this.props.empId > 0 ? '/orders/users/'+_this.props.empId : '/orders/all';
+        url += '?page=1'
         if (start || end) {
-            url += '?start='+start+'&end='+end;
+            url += '&start='+start+'&end='+end;
         }
         re.get(url, function (res) {
             let list = [];
@@ -141,7 +143,7 @@ class OrderList extends React.Component {
             <div>
             {orderNum > 0 && <span className="jst-personal-order-info">共完成 {orderNum} 项服务，合计￥ {totalAmount.toFixed(2)} 元</span> 
             }
-            <MyComponent changeList={this.changeList}/>
+            <DateComponent changeList={this.changeList}/>
             <table>
                 <thead>
                     <tr>

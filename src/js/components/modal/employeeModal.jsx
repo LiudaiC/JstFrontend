@@ -9,7 +9,6 @@
 let React = require('react');
 let ReactDOM = require('react-dom');
 let re = require('../../utils/ajax.js');
-let dom = require('../../utils/dom.js');
 let InputComponent = require('../inputComponent.jsx');
 
 class CheckBox extends React.Component {

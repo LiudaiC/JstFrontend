@@ -41,7 +41,7 @@ class MemberList extends React.Component {
 
     componentDidMount () {
         let _this = this;
-        re.get('/employees/all', function (res) {
+        re.get('/employees/all?page=' + this.props.page, function (res) {
             let list = [];
             res.list.forEach(function (e) {
                 let date = new Date(e.joinTime);

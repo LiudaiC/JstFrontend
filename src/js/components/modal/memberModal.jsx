@@ -53,6 +53,7 @@ class MemberModal extends React.Component {
             password: '',
             chargeAmount: 0,
             extraAmount: 0,
+            memDiscount: 0.00,
             status: 0,
             remark: ''
         };
@@ -77,6 +78,7 @@ class MemberModal extends React.Component {
                     password: res.password || '',
                     chargeAmount: res.chargeAmount || 0,
                     extraAmount: res.extraAmount || 0,
+                    memDiscount: res.memDiscount || 1.00,
                     remark: res.remark || ''
                 });
             })
@@ -99,6 +101,7 @@ class MemberModal extends React.Component {
         let password = this.state.password;
         let chargeAmount = this.state.chargeAmount;
         let extraAmount = this.state.extraAmount;
+        let memDiscount = this.state.memDiscount.toFixed(2);
         let remark = this.state.remark;
         return(
         <div className="modal-body">
@@ -119,6 +122,9 @@ class MemberModal extends React.Component {
             </div>
             <div>
             {id != 0 && <InputComponent type="text" placeholder="请输入赠送金额" value={extraAmount} name="extraAmount" desc="赠送金额：" dataChange={this.dataChange}/>}
+            </div>
+            <div>
+            {id != 0 && <InputComponent type="text" placeholder="请输入会员折扣：0~1.0" value={memDiscount} name="memDiscount" desc="会员折扣：" dataChange={this.dataChange}/>}
             </div>
             {id != 0 && <TextRemarkComponent value={remark} dataChange={this.dataChange}/>}
         </div>

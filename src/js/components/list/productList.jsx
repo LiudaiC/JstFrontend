@@ -34,7 +34,7 @@ class MemberList extends React.Component {
 
     componentDidMount () {
         let _this = this;
-        re.get('/products/all', function (res) {
+        re.get('/products/all?page=1', function (res) {
             let list = [];
             res.list.forEach(function (e) {
                 let date = new Date(e.updateTime);

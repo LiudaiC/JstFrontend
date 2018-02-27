@@ -37,7 +37,7 @@ module.exports = {
                     case -1: 
                             msg = '会员卡号已存在，请重新输入！';
                             break;
-                    case -2:
+                    case '[-2]':
                         msg = '会员余额不足';
                         break;
                     case -3:

@@ -171,13 +171,16 @@ span {
     border-radius: 2px;
     background-color: #fff;
     color: #666;
-    width: 600px;
+    width: 636px;
     z-index: 222;
     padding: 16px;
     position: fixed;
     top: 100px;
     &.delete-modal {
         width: 400px;
+    }
+    &.mem-info-modal {
+        width: 1006px;
     }
     .modal-head {
         height: 28px;
@@ -201,24 +204,60 @@ span {
     .modal-body {
         max-height: 800px;
         div {
-            width: 300px;
+            width: 350px;
             margin: 8px auto;
             .jst-info-span {
                 width: auto;
                 margin-right: 20px;
+            }
+            &.jst-export-wrapper, form {
+                width: auto;
+                padding-left: 60px;
+                input[type=text] {
+                    width: 100px;
+                    margin-right: 20px;
+                }
+                b {
+                    margin-right: 16px;
+                }
+                div {
+                    width: auto;
+                    display: inline-block;
+                }
+            }
+            &.jst-service-list {
+                span {
+                    width: 100px;
+                    position: relative;
+                    border: 1px solid #aaa;
+                    padding: 2px 0px 2px 4px;
+                    margin-right: 10px;
+                    margin-top: 10px;
+                    b {
+                        position: absolute;
+                        right: 4px;
+                        top: 0px;
+                        color: red;
+                        cursor: pointer;
+                        font-size: 20px;
+                    }
+                }
             }
             &.jst-mem-info {
                 width: auto;
                 .mem-list {
                     float: left;
                     width: 49%;
+                    &.content {
+                        max-height: 400px;
+                        overflow: auto;
+                    }
                     + .mem-list{
                         margin-left: 10px;
                     }
                     li {
-                        height: 26px;
-                        line-height: 26px;
-                        padding-left: 8px;
+                        padding: 5px 0 5px 8px;
+                        border-bottom: 1px solid #eee;
                         &.info-title {
                             background-color: #ebebeb;
                         }
@@ -245,6 +284,7 @@ span {
                         left: 84px;
                         top: 31px;
                         max-height: 200px;
+                        width: 320px;
                     }
                     li {
                         cursor: pointer;
@@ -305,6 +345,10 @@ span {
 }
 #listMain {
     width: 100%;
+    .member-input-query input {
+        margin: 0 0 10px 60px;
+        width: 220px;
+    }
     .jst-date-wrapper {
         display: inline-block;
         .jst-date {
@@ -343,6 +387,10 @@ span {
                     margin-right: 4px;
                 }
             }
+            .no-data{
+                text-align: center;
+                color: #666;
+            }
         }
         thead {
             background-color: #ebebeb;
@@ -354,6 +402,34 @@ span {
                     background-color: #f8f8f8;
                 }
             }
+        }
+    }
+    .jst-page-component {
+        margin: 20px auto;
+        li {
+            float: left;
+            width: 20px;
+            height: 20px;
+            border: 1px solid #eee;
+            text-align: center;
+            line-height: 20px;
+            &.hover {
+                background: #29e;
+            }
+            input {
+                width: 20px;
+                padding: 0;
+                border: none;
+                text-align: center;
+                height: 19px;
+                line-height: 19px;
+                vertical-align: baseline;
+            }
+        }
+        &:after {
+            content: '';
+            clear:both;
+            display: block;
         }
     }
 }
