@@ -141,7 +141,7 @@ class RechargeModal extends React.Component {
     componentDidMount() {
         let _this = this;
         re.get('/members/'+_this.state.memberId, function (res) {
-            _this.setState({memDiscount: res.memDiscount, balanceAmount: res.balanceAmount.toFixed(2)});
+            _this.setState({memDiscount: res.memDiscount.toFixed(2)+'', balanceAmount: res.balanceAmount.toFixed(2)});
         });
     }
     

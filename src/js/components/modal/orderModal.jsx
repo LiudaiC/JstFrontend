@@ -205,7 +205,6 @@ class OrderModal extends React.Component {
             memberId: d.id,
             balance: d.balance,
             vipPrice: vipPrice,
-            realPrice: vipPrice * d.discount,
             discount: d.discount,
             str:''
         });
@@ -242,6 +241,9 @@ class OrderModal extends React.Component {
             }
             if (data.realPrice) {
                 data.changeAmount = _this.state.realCharge - data.realPrice;
+            }
+            if (!data.realPrice && !data.realCharge) {
+                data.changeAmount = 0 - _this.state.realPrice;
             }
             _this.setState(data, function () {
                 let errorMsg = +_this.state.balance > 0 && +_this.state.memberId > 0
@@ -304,6 +306,7 @@ class OrderModal extends React.Component {
             desc="应收金额：" dataChange={this.dataChange}/>
             </div>
             <ServiceChange num={changeAmount}/>
+            {balance > 0 && <div>会员本次结余：￥ {balance - realPrice} 元</div>}
             <div>
             {changeAmount < 0 && <span className="color-red jst-msg">傻啊，钱收少了！</span>}
             </div>
