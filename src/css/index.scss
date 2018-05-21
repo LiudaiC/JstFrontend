@@ -210,6 +210,103 @@ span {
                 width: auto;
                 margin-right: 20px;
             }
+            &.service-star {
+                height: 30px;
+                line-height: 31px;
+                .star {
+                    display: inline-block;
+                    position: relative;
+                    color: red;
+                    width: 0px;
+                    height: 0px;
+                    vertical-align: -5px;
+                    border-right:  10px solid transparent;
+                    border-bottom: 7px  solid gray;
+                    border-left:   10px solid transparent;
+                    -moz-transform:    rotate(35deg);
+                    -webkit-transform: rotate(35deg);
+                    -ms-transform:     rotate(35deg);
+                    -o-transform:      rotate(35deg);
+                    &::before{
+                        border-bottom: 8px solid gray;
+                        border-left: 3px solid transparent;
+                        border-right: 3px solid transparent;
+                        position: absolute;
+                        height: 0;
+                        width: 0;
+                        top: -5px;
+                        left: -6px;
+                        display: block;
+                        content: '';
+                        -webkit-transform: rotate(-35deg);
+                        -moz-transform:    rotate(-35deg);
+                        -ms-transform:     rotate(-35deg);
+                        -o-transform:      rotate(-35deg);
+                    }
+                    &::after{
+                        position: absolute;
+                        display: block;
+                        color: red;
+                        top: 0px;
+                        left: -10px;
+                        width: 0px;
+                        height: 0px;
+                        border-right: 10px solid transparent;
+                        border-bottom: 7px solid gray;
+                        border-left: 10px solid transparent;
+                        -webkit-transform: rotate(-70deg);
+                        -moz-transform:    rotate(-70deg);
+                        -ms-transform:     rotate(-70deg);
+                        -o-transform:      rotate(-70deg);
+                        content: '';
+                    }
+                    &.star1:hover {
+                        border-bottom: 7px  solid red;
+                        &::before {
+                        border-bottom: 8px  solid red;
+                        }
+                        &::after {
+                        border-bottom: 7px  solid red;
+                        }
+                    }
+                    &.star2:hover + .star1,&.star2:hover{
+                        border-bottom: 7px  solid red;
+                        &::before {
+                            border-bottom: 8px  solid red;
+                        }
+                        &::after {
+                            border-bottom: 7px  solid red;
+                        }
+                    }
+                    &.star3:hover + .star1, &.star3:hover + .star2, &.star3:hover{
+                        border-bottom: 7px  solid red;
+                        &::before {
+                            border-bottom: 8px  solid red;
+                        }
+                        &::after {
+                            border-bottom: 7px  solid red;
+                        }
+                    }
+                    &.star4:hover + .star1,&.star4:hover  + .star2,&.star4:hover  + .star3,&.star4:hover {
+                        border-bottom: 7px  solid red;
+                        &::before {
+                            border-bottom: 8px  solid red;
+                        }
+                        &::after {
+                            border-bottom: 7px  solid red;
+                        }
+                    }
+                    &.star5:hover + .star1,&.star5:hover + .star2,&.star5:hover + .star3,&.star5:hover + .star4,&.star5:hover{
+                        border-bottom: 7px  solid red;
+                        &::before {
+                            border-bottom: 8px  solid red;
+                        }
+                        &::after {
+                            border-bottom: 7px  solid red;
+                        }
+                    }
+                }
+            }
             &.jst-export-wrapper, form {
                 width: auto;
                 padding-left: 60px;
@@ -348,6 +445,13 @@ span {
     .member-input-query input {
         margin: 0 0 10px 60px;
         width: 220px;
+    }
+    .jst-data-load {
+        text-align: center;
+        border-top: 1px solid #d6d6d6;
+        height: 40px;
+        line-height: 40px;
+        color: #666;
     }
     .jst-date-wrapper {
         display: inline-block;

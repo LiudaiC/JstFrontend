@@ -53,7 +53,7 @@ class MemberModal extends React.Component {
             password: '',
             chargeAmount: 0,
             extraAmount: 0,
-            memDiscount: 0.00,
+            memDiscount: 1.00,
             status: 0,
             remark: ''
         };
@@ -78,7 +78,7 @@ class MemberModal extends React.Component {
                     password: res.password || '',
                     chargeAmount: res.chargeAmount || 0,
                     extraAmount: res.extraAmount || 0,
-                    memDiscount: res.memDiscount || 1.00,
+                    memDiscount: res.memDiscount.toFixed(2) || 1.00,
                     remark: res.remark || ''
                 });
             })
@@ -101,7 +101,7 @@ class MemberModal extends React.Component {
         let password = this.state.password;
         let chargeAmount = this.state.chargeAmount;
         let extraAmount = this.state.extraAmount;
-        let memDiscount = this.state.memDiscount.toFixed(2);
+        let memDiscount = parseFloat(this.state.memDiscount).toFixed(2);
         let remark = this.state.remark;
         return(
         <div className="modal-body">

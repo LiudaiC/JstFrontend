@@ -48,7 +48,7 @@ class DateComponent extends React.Component {
     handleClick () {
         let start = dom.getById('start').value;
         let end = dom.getById('end').value;
-        this.props.changeList(start, end);
+        this.props.changeList(1, start, end);
     }
 
     render(){
@@ -93,12 +93,19 @@ class OrderList extends React.Component {
     constructor (props) {
         super(props);
         this.state = {
-            listItem: '',
+            listItem: [],
             orderNum: 0,
-            totalAmount: 0
+            totalAmount: 0,
+            scrollY: 0,
+            dataLoadTip: '',
+            start: '',
+            end:'',
+            url: '',
+            page: 1
         }
         this.changeList = this.changeList.bind(this);
         this.updateOper = this.updateOper.bind(this);
+        this.handleScroll = this.handleScroll.bind(this);
     }
 
     updateOper (e) {
@@ -110,38 +117,67 @@ class OrderList extends React.Component {
         });
     }
 
-    changeList (start, end) {
+    changeList (search_page, s_start, s_end) {
         let _this = this;
-        console.log(this.props.page);
-        let url = _this.props.empId > 0 ? '/orders/users/'+_this.props.empId : '/orders/all';
-        url += '?page=1'
-        if (start || end) {
-            url += '&start='+start+'&end='+end;
+        let page = search_page || this.state.page;
+        let start = s_start || this.state.start;
+        let end = s_end || this.state.end;
+        let url = _this.props.empId > 0 ? '/orders/users/'+_this.props.empId : '/orders';
+        if (start || _this.state.start) {
+            url += '?start=' + start + '&end=' + end + '&page=' + page;
+        } else {
+            url += '?page=' + page;
         }
         re.get(url, function (res) {
-            let list = [];
+            let list = page == 1?[]:_this.state.listItem;
+            let orderNum = page == 1?res.orderNum:_this.state.orderNum + res.orderNum;
+            let totalAmount = page == 1?(_this.props.empId > 0 ? res.totalAmount : res.realAmount):_this.state.totalAmount + (_this.props.empId > 0 ? res.totalAmount : res.realAmount);
+            let dataLoadTip = res.list.length < 30 ? '数据加载完毕' : '';
             res.list.length > 0 ?
             res.list.forEach(function (e, i) {
-                list.push(<tr key={i} onClick={_this.handleClick} className={e.status>0 && 'color-gray'}>
+                list.push(<tr key={e.id+Math.random()*1000} onClick={_this.handleClick} className={e.status>0 && 'color-gray'}>
                     <td className="first-td">{e.productName}</td><td>￥ {e.realPrice.toFixed(2)}</td>
                 <td>{e.memberName}</td><td>{e.remark}</td><td>{e.empName}</td><td>{e.orderTime}</td>
-                <td><a href="javascript:void(0)" onClick={_this.updateOper} id={e.id}>{e.status == 0 && '置为失效'}</a></td></tr>);
-            }) : list.push(<tr key="1"><td colSpan="7" className="jst-text-center">暂无数据</td></tr>);
-            _this.setState({listItem:list, orderNum: res.orderNum, totalAmount: _this.props.empId > 0 ? res.totalAmount : res.realAmount});
+                <td>{e.status == 0 ? <a href="javascript:void(0)" onClick={_this.updateOper} id={e.id}>置为失效</a> : '无效订单'}</td></tr>);
+            }) : (!list.length && list.push(<tr key="0"><td colSpan="7" className="jst-text-center">暂无数据</td></tr>));
+            _this.setState({listItem:list, orderNum: orderNum, totalAmount: totalAmount, page: page, dataLoadTip: dataLoadTip, start:start,end:end});
         });
     }
 
     componentDidMount () {
         this.changeList();
+        window.addEventListener('scroll', this.handleScroll);
+    }
+
+    componentWillUnmount () {
+        window.removeEventListener('scroll', this.handleScroll);
+    }
+
+    handleScroll (e) {
+        let _this = this;
+        let scrollY = window.pageYOffset;
+        if (scrollY - this.state.scrollY > 0) {
+            if (document.body.scrollHeight - dom.getByTag('table')[0].offsetHeight < 300 && this.state.dataLoadTip == '') {
+                this.setState({
+                    scrollY: scrollY,
+                    page: _this.state.page + 1,
+                    dataLoadTip: '数据加载中......'
+                }, function () {
+                    _this.changeList();
+                });
+            }
+        }
+
     }
 
     render () {
         let listItem = this.state.listItem;
         let orderNum = this.state.orderNum;
         let totalAmount = this.state.totalAmount;
+        let dataLoadTip = this.state.dataLoadTip;
         return(
             <div>
-            {orderNum > 0 && <span className="jst-personal-order-info">共完成 {orderNum} 项服务，合计￥ {totalAmount.toFixed(2)} 元</span> 
+            {orderNum > 0 && <span className="jst-personal-order-info">当前显示 {orderNum} 项服务，合计￥ {totalAmount.toFixed(2)} 元</span> 
             }
             <DateComponent changeList={this.changeList}/>
             <table>
@@ -151,9 +187,10 @@ class OrderList extends React.Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {listItem}
+                    {listItem.length > 0 && listItem}
                 </tbody>
             </table>
+            <div className="jst-data-load">{dataLoadTip}</div>
             </div>
         );
     }

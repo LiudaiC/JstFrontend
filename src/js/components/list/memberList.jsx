@@ -16,8 +16,12 @@ class MemberList extends React.Component {
     constructor (props) {
         super(props);
         this.state = {
-            listItem: '',
-            queryValue: ''
+            listItem: [],
+            queryValue: '',
+            url: '/members',
+            page: 1,
+            scrollY: 0,
+            dataLoadTip: ''
         }
         this.handleClick = this.handleClick.bind(this);
         this.updateOper = this.updateOper.bind(this);
@@ -25,6 +29,7 @@ class MemberList extends React.Component {
         this.revoke = this.revoke.bind(this);
         this.queryMember = this.queryMember.bind(this);
         this.refreshList = this.refreshList.bind(this);
+        this.handleScroll = this.handleScroll.bind(this);
     }
 
     updateOper (e) {
@@ -57,28 +62,27 @@ class MemberList extends React.Component {
     queryMember(e) {
         let _this = this;
         let v = e.target.value;
-        let url = v ? '/members/query/' + v : '/members/all';
-        _this.setState({queryValue: v}, function () {
-            _this.refreshList(url);
+        let url = v ? '/members/query/' + v : '/members';
+        _this.setState({queryValue: v, url: url,page:1}, function () {
+            _this.refreshList();
         });
     }
 
-    componentDidMount () {
-        this.refreshList('/members/all');
-    }
-
-    refreshList (url) {
+    refreshList () {
         let _this = this;
-        re.get(url + '?page=' + this.props.page, function (res) {
-            let list = [];
+        let page = this.state.page;
+        let url = this.state.url;
+        re.get(url + '?page=' + page, function (res) {
+            let list = page==1?[]:_this.state.listItem;
             let mems = res.list || res;
+            mems.length > 0 ?
             mems.forEach(function (e) {
                 let date = new Date(e.registerTime);
                 let m = date.getMonth() + 1;
                 let d = date.getDate();
                 e.rdate = date.getFullYear() + '-'
                 + (m < 10 ? '0' + m : m) + '-'+ (d < 10 ? '0' + d :d);
-                list.push(<tr key={e.id} onClick={_this.handleClick} id={e.id} title={e.remark}>
+                list.push(<tr key={e.id+Math.random()} onClick={_this.handleClick} id={e.id} title={e.remark}>
                     <td className="first-td">{e.cardNo}</td><td>{e.name}</td><td>{e.phone}</td>
                     <td>￥ {e.chargeAmount.toFixed(2)}</td><td>￥ {e.extraAmount.toFixed(2)}</td>
                     <td>￥ {e.expenseAmount.toFixed(2)}</td><td>￥ {e.balanceAmount.toFixed(2)}</td>
@@ -94,17 +98,41 @@ class MemberList extends React.Component {
                     }
                     </td>
                 </tr>);
-            });
-            if (!list.length) {
-                list.push(<tr key="1"><td colSpan="10" className="no-data">暂无数据</td></tr>);
-            }
-            _this.setState({listItem:list});
+            }) : (!list.length && list.push(<tr key="0"><td colSpan="10" className="no-data">暂无数据</td></tr>));
+            _this.setState({listItem: list, page: page, dataLoadTip: mems.length < 30 ? '数据加载完毕' : '', url: url});
         });
+    }
+
+    componentDidMount () {
+        this.refreshList();
+        window.addEventListener('scroll', this.handleScroll);
+    }
+
+    componentWillUnmount () {
+        window.removeEventListener('scroll', this.handleScroll);
+    }
+
+    handleScroll (e) {
+        let _this = this;
+        let scrollY = window.pageYOffset;
+        if (scrollY - this.state.scrollY > 0) {
+            if (document.body.scrollHeight - dom.getByTag('table')[0].offsetHeight < 300 && this.state.dataLoadTip == '') {
+                this.setState({
+                    scrollY: scrollY,
+                    page: _this.state.page + 1,
+                    dataLoadTip: '数据加载中......'
+                }, function () {
+                    this.refreshList();
+                });
+            }
+        }
+
     }
 
     render () {
         let listItem = this.state.listItem;
         let queryValue = this.state.queryValue;
+        let dataLoadTip = this.state.dataLoadTip;
         return(
             <div>
             <div className="member-input-query">
@@ -118,9 +146,10 @@ class MemberList extends React.Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {listItem}
+                    {listItem.length > 0 && listItem}
                 </tbody>
             </table>
+            {listItem.length > 0 && <div className="jst-data-load">{dataLoadTip}</div>}
             </div>
         );
     }

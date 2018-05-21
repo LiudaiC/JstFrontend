@@ -3,7 +3,7 @@ var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 module.exports = {
-    devtool: 'eval-source-map',
+    devtool: false,
     entry: [
     'webpack/hot/dev-server',
      path.resolve(__dirname, 'src/js/index.js')
@@ -62,7 +62,12 @@ module.exports = {
             }
         }),
         new webpack.optimize.CommonsChunkPlugin('vendors', 'jst.js'),
-        new webpack.HotModuleReplacementPlugin()
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.optimize.UglifyJsPlugin({
+              compress: {
+                warnings: false
+              }
+            })
     ],
     devServer: {
         colors: true,

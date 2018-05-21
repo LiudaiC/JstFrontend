@@ -167,6 +167,7 @@ class OrderModal extends React.Component {
             memberId: '',
             balance: -1,
             serviceList: [],
+            extraProportion: 0,
             changeAmount: 0,
             pids:[],
             remark: ''
@@ -237,13 +238,13 @@ class OrderModal extends React.Component {
         } else {
 
             if (data.realCharge) {
-                data.changeAmount = data.realCharge - _this.state.realPrice;
+                data.changeAmount = (data.realCharge - _this.state.realPrice).toFixed(2);
             }
             if (data.realPrice) {
-                data.changeAmount = _this.state.realCharge - data.realPrice;
+                data.changeAmount = (_this.state.realCharge - data.realPrice).toFixed(2);
             }
             if (!data.realPrice && !data.realCharge) {
-                data.changeAmount = 0 - _this.state.realPrice;
+                data.changeAmount = (0 - _this.state.realPrice).toFixed(2);
             }
             _this.setState(data, function () {
                 let errorMsg = +_this.state.balance > 0 && +_this.state.memberId > 0
