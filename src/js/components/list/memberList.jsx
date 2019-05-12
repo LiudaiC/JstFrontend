@@ -80,13 +80,14 @@ class MemberList extends React.Component {
                 let date = new Date(e.registerTime);
                 let m = date.getMonth() + 1;
                 let d = date.getDate();
+                let memDiscount = Number(e.memDiscount || 1)
                 e.rdate = date.getFullYear() + '-'
                 + (m < 10 ? '0' + m : m) + '-'+ (d < 10 ? '0' + d :d);
                 list.push(<tr key={e.id+Math.random()} onClick={_this.handleClick} id={e.id} title={e.remark}>
                     <td className="first-td">{e.cardNo}</td><td>{e.name}</td><td>{e.phone}</td>
                     <td>￥ {e.chargeAmount.toFixed(2)}</td><td>￥ {e.extraAmount.toFixed(2)}</td>
                     <td>￥ {e.expenseAmount.toFixed(2)}</td><td>￥ {e.balanceAmount.toFixed(2)}</td>
-                    <td>{e.memDiscount.toFixed(2)}</td>
+                    <td>{memDiscount.toFixed(2)}</td>
                     <td title={e.remark}>{e.remark}</td><td>{e.rdate}</td>
                     <td>
                         {e.status ? '已注销' :

@@ -296,7 +296,7 @@ class OrderModal extends React.Component {
             <span>服务原价：</span><span className="jst-amount color-orange">￥  {originPrice}</span>元
             </div>
             <div>
-            <span>会员价：</span><span className="jst-amount color-orange">￥ {vipPrice * discount}</span>元
+            <span>会员价：</span><span className="jst-amount color-orange">￥ {originPrice * discount}</span>元
             </div>
             <div>
             <InputComponent type="text" placeholder="请输入实收金额" name="realCharge" 
